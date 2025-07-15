@@ -1,8 +1,59 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: 210 40% 98%;
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --radius: 0.625rem;
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  /* 전용 css */
+  --clover-primary: 34 197 94; /* emerald-500 */
+  --clover-primary-foreground: 255 255 255; /* white */
+
+  --clover-secondary: 190 242 100; /* lime-300 */
+  --clover-secondary-foreground: 22 101 52;
+
+  --clover-accent: 132 204 22; /* lime-500 */
+  --clover-muted: 240 253 244; /* green-50 */
+  --clover-muted-foreground: 22 163 74; /* green-600 */
+
+  --clover-card: 255 255 255 / 0.95; /* white */
+  --clover-card-foreground: 38 38 38; /* gray-800 */
+
+  --clover-border: 240 253 244; /* green-50 */
+  --clover-input: 220 252 231; /* green-100 */
 }
 
 @theme inline {
@@ -10,17 +61,213 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* 클로버 전용 색상 */
+  --color-clover-primary: rgb(var(--clover-primary));
+  --color-clover-primary-foreground: rgb(var(--clover-primary-foreground));
+  --color-clover-secondary: rgb(var(--clover-secondary));
+  --color-clover-secondary-foreground: rgb(var(--clover-secondary-foreground));
+  --color-clover-accent: rgb(var(--clover-accent));
+  --color-clover-muted: rgb(var(--clover-muted));
+  --color-clover-muted-foreground: rgb(var(--clover-muted-foreground));
+  --color-clover-card: rgb(var(--clover-card));
+  --color-clover-card-foreground: rgb(var(--clover-card-foreground));
+  --color-clover-border: rgb(var(--clover-border));
+  --color-clover-input: rgb(var(--clover-input));
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+/* Typography Styles */
+@layer base {
+  /* Reset */
+  * {
+    @apply border-border outline-ring/50;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* 부드러운 스크롤을 원하는 특정 요소나 상황에서만 적용 */
+  html.smooth-scroll {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    scrollbar-gutter: stable;
+  }
+
+  html body[data-scroll-locked] {
+    overflow: visible !important;
+    margin-right: 0 !important;
+  }
+
+  /* Heading Styles - Based on Figma Typography */
+  .heading-1 {
+    font-size: 2.5rem; /* 40px */
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .heading-2 {
+    font-size: 3rem; /* 48px */
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .heading-3 {
+    font-size: 1.875rem; /* 30px */
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  .heading-4 {
+    font-size: 1.5rem; /* 24px */
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+
+  .heading-5 {
+    font-size: 1.25rem; /* 20px */
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .heading-6 {
+    font-size: 1.125rem; /* 18px */
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  /* Body Text Styles */
+  .body-large {
+    font-size: 1.125rem; /* 18px */
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .body-medium {
+    font-size: 1rem; /* 16px */
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .body-small {
+    font-size: 0.875rem; /* 14px */
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  .body-xs {
+    font-size: 0.75rem; /* 12px */
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  /* Medium Weight Variants */
+  .body-medium-strong {
+    font-size: 1rem; /* 16px */
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  .body-small-strong {
+    font-size: 0.875rem; /* 14px */
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  /* Input Text Style */
+  .input-text {
+    font-size: 0.875rem; /* 14px */
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  /* Label Text */
+  .label-small {
+    font-size: 0.75rem; /* 12px */
+    font-weight: 500;
+    line-height: 1.4;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .label-medium {
+    font-size: 0.875rem; /* 14px */
+    font-weight: 500;
+    line-height: 1.4;
+  }
 }
