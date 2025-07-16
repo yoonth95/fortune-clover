@@ -28,7 +28,11 @@ export default function RootLayout({
     <html lang="ko">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <div className="min-h-screen bg-gradient-to-b from-clover-primary to-clover-secondary flex justify-between">
-          <div className="w-full max-w-sm mx-auto relative">{children}</div>
+          <div className="w-full max-w-sm mx-auto">
+            <div className="min-h-full flex flex-col items-center justify-center px-4 sm:px-6 relative">
+              {children}
+            </div>
+          </div>
         </div>
       </body>
     </html>
