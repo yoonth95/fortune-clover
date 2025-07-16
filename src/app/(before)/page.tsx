@@ -1,34 +1,9 @@
 import Link from "next/link";
-import { Sun, Heart, Sparkles, Star } from "lucide-react";
 import { CloverIcon } from "@/components/common/CloverIcon";
 
 export default function HomeRootPage() {
   return (
     <>
-      {/* Decorative elements */}
-      <div className="absolute top-16 sm:top-20 left-6 sm:left-10 animate-float">
-        <Star className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-300" />
-      </div>
-      <div
-        className="absolute top-24 sm:top-32 right-8 sm:right-16 animate-float"
-        style={{ animationDelay: "1s" }}
-      >
-        <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-pink-300" />
-      </div>
-      <div
-        className="absolute bottom-32 sm:bottom-40 left-4 sm:left-8 animate-float"
-        style={{ animationDelay: "2s" }}
-      >
-        <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-pink-300" />
-      </div>
-
-      <div
-        className="absolute bottom-32 sm:bottom-25 right-10 sm:right-16 animate-float"
-        style={{ animationDelay: "2s" }}
-      >
-        <Sun className="w-4 h-4 sm:w-6 sm:h-6 text-yellow-300" />
-      </div>
-
       {/* Main clover illustration */}
       <div className="mb-8 sm:mb-12 relative">
         <div className="w-32 h-32 sm:w-40 sm:h-40">
