@@ -2,40 +2,23 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { z } from "zod";
-
-const ProfileNameSchema = z.object({
-  name: z
-    .string()
-    .min(1, { message: "이름을 입력해주세요" })
-    .min(2, { message: "이름은 최소 2글자 이상이어야 합니다" })
-    .max(20, { message: "이름은 20글자를 초과할 수 없습니다" })
-    .regex(/^[가-힣a-zA-Z\s]+$/, {
-      message: "이름은 한글, 영문, 공백만 사용할 수 있습니다",
-    }),
-});
-
-export interface ProfileData {
-  name?: string;
-  birthDate?: string;
-  [key: string]: any;
-}
+import { PartialProfileDataType, ProfileNameSchema } from "@/types/ProfileType";
 
 /**
  * 프로필 정보를 쿠키에서 조회합니다.
  */
-export async function getProfileData(): Promise<ProfileData> {
+export async function getProfileData(): Promise<PartialProfileDataType | null> {
   const cookieStore = await cookies();
   const profileCookie = cookieStore.get("profile-info");
 
   if (!profileCookie?.value) {
-    return {};
+    return null;
   }
 
   try {
-    return JSON.parse(decodeURIComponent(profileCookie.value)) as ProfileData;
+    return JSON.parse(decodeURIComponent(profileCookie.value)) as PartialProfileDataType;
   } catch {
-    return {};
+    return null;
   }
 }
 
@@ -60,7 +43,7 @@ export async function saveProfileName(formData: FormData) {
     const existingData = await getProfileData();
 
     // 이름 정보 추가
-    const updatedData: ProfileData = {
+    const updatedData: PartialProfileDataType = {
       ...existingData,
       name: name.trim(),
     };
@@ -69,16 +52,16 @@ export async function saveProfileName(formData: FormData) {
     const cookieStore = await cookies();
     cookieStore.set("profile-info", encodeURIComponent(JSON.stringify(updatedData)), {
       path: "/",
-      maxAge: 60 * 60 * 24 * 7, // 7일
+      maxAge: 60 * 60 * 24 * 30, // 30일
       httpOnly: false, // 클라이언트에서도 접근 가능하도록
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
     });
-
-    // 다음 단계로 리다이렉트
-    redirect("/profile/detail");
   } catch (error) {
     console.error("Error saving name:", error);
     throw new Error("저장 중 오류가 발생했습니다. 다시 시도해주세요.");
   }
+
+  // 성공적으로 저장된 후 리다이렉트
+  redirect("/profile/detail");
 }

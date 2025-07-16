@@ -6,7 +6,7 @@ export function middleware(request: NextRequest) {
 
   let profileData = null;
   try {
-    profileData = profileCookie ? JSON.parse(profileCookie) : null;
+    profileData = profileCookie ? JSON.parse(decodeURIComponent(profileCookie)) : null;
   } catch {
     profileData = null;
   }
