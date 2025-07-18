@@ -12,7 +12,7 @@ export function middleware(request: NextRequest) {
   }
 
   const hasName = profileData?.name;
-  const hasDetail = profileData?.detail;
+  const hasDetail = profileData?.gender && profileData?.calendarType && profileData?.birthDate;
 
   // 단계별 접근 제어
   // 1단계: 메인 페이지 ("/") - 항상 접근 가능
@@ -29,6 +29,9 @@ export function middleware(request: NextRequest) {
     // 모든 정보가 있으면 fortune 페이지로 리다이렉트
     if (hasName && hasDetail) {
       return NextResponse.redirect(new URL("/fortune", request.url));
+    }
+    if (hasName && !hasDetail) {
+      return NextResponse.redirect(new URL("/profile/detail", request.url));
     }
     return NextResponse.next();
   }
