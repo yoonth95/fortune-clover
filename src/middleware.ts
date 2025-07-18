@@ -2,25 +2,75 @@ import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const hasProfile = Boolean(request.cookies.get("profile-info")?.value);
+  const profileCookie = request.cookies.get("profile-info")?.value;
 
-  const publicPaths = ["/", "/profile"];
-
-  // 프로필 없으면 before 그룹 외 모든 경로 접근 금지 → "/"로 리다이렉트
-  if (!hasProfile) {
-    if (!publicPaths.includes(pathname)) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-    return NextResponse.next();
+  let profileData = null;
+  try {
+    profileData = profileCookie ? JSON.parse(decodeURIComponent(profileCookie)) : null;
+  } catch {
+    profileData = null;
   }
 
-  // 프로필 있으면 before 그룹 루트("/")로 접근 시 after 그룹 메인("/fortune")으로 재작성
-  else {
-    if (pathname === "/") {
+  const hasName = profileData?.name;
+  const hasDetail = profileData?.gender && profileData?.calendarType && profileData?.birthDate;
+
+  // 단계별 접근 제어
+  // 1단계: 메인 페이지 ("/") - 항상 접근 가능
+  if (pathname === "/") {
+    // 모든 정보가 있으면 fortune 페이지로 리다이렉트
+    if (hasName && hasDetail) {
       return NextResponse.redirect(new URL("/fortune", request.url));
     }
     return NextResponse.next();
   }
+
+  // 2단계: 이름 페이지 ("/profile/name") - 항상 접근 가능 (첫 단계)
+  if (pathname === "/profile/name") {
+    // 모든 정보가 있으면 fortune 페이지로 리다이렉트
+    if (hasName && hasDetail) {
+      return NextResponse.redirect(new URL("/fortune", request.url));
+    }
+    if (hasName && !hasDetail) {
+      return NextResponse.redirect(new URL("/profile/detail", request.url));
+    }
+    return NextResponse.next();
+  }
+
+  // 3단계: 디테일 페이지 ("/profile/detail") - 이름이 있어야 접근 가능
+  if (pathname === "/profile/detail") {
+    if (!hasName) {
+      return NextResponse.redirect(new URL("/profile/name", request.url));
+    }
+    // 모든 정보가 있으면 fortune 페이지로 리다이렉트
+    if (hasDetail) {
+      return NextResponse.redirect(new URL("/fortune", request.url));
+    }
+    return NextResponse.next();
+  }
+
+  // 4단계: fortune 페이지 ("/fortune") - 모든 정보가 있어야 접근 가능
+  if (pathname === "/fortune") {
+    if (!hasName || !hasDetail) {
+      // 이름이 없으면 이름 페이지로
+      if (!hasName) {
+        return NextResponse.redirect(new URL("/profile/name", request.url));
+      }
+      // 이름은 있지만 디테일이 없으면 디테일 페이지로
+      return NextResponse.redirect(new URL("/profile/detail", request.url));
+    }
+    return NextResponse.next();
+  }
+
+  // 기타 경로는 현재 프로그레스에 따라 적절한 페이지로 리다이렉트
+  if (!hasName) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+  if (!hasDetail) {
+    return NextResponse.redirect(new URL("/profile/detail", request.url));
+  }
+
+  // 모든 정보가 있으면 fortune 페이지로
+  return NextResponse.redirect(new URL("/fortune", request.url));
 }
 
 export const config = {
