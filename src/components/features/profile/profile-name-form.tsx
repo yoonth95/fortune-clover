@@ -1,54 +1,68 @@
 "use client";
 
-import { useActionState } from "react";
-import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { saveProfileName } from "@/lib/profile-actions";
-import { cn } from "@/lib/utils";
+import { ProfileNameSchema, type ProfileNameType } from "@/types/ProfileType";
 
-interface FormState {
-  error?: string;
-}
-
-export function ProfileNameForm() {
-  const [state, formAction, pending] = useActionState<FormState, FormData>(
-    async (prevState: FormState, formData: FormData) => {
-      try {
-        await saveProfileName(formData);
-        return { error: undefined };
-      } catch (error) {
-        return {
-          error: error instanceof Error ? error.message : "오류가 발생했습니다",
-        };
-      }
+const ProfileNameForm = () => {
+  const form = useForm<ProfileNameType>({
+    resolver: zodResolver(ProfileNameSchema),
+    defaultValues: {
+      name: "",
     },
-    { error: undefined },
-  );
+  });
+
+  const onSubmit = async (values: ProfileNameType) => {
+    const formData = new FormData();
+    formData.append("name", values.name);
+    try {
+      await saveProfileName(formData);
+    } catch (error) {
+      form.setError("name", {
+        type: "manual",
+        message: error instanceof Error ? error.message : "오류가 발생했습니다",
+      });
+    }
+  };
 
   return (
-    <form action={formAction} className="flex flex-col flex-grow gap-4 items-center w-full">
-      <div className="space-y-2 w-full max-w-xs">
-        <Input
-          id="name"
-          name="name"
-          type="text"
-          placeholder="이름 또는 닉네임을 입력해주세요."
-          className={cn(
-            "w-full px-3 py-5 rounded-md bg-white border text-sm border-white/20 text-black text-center placeholder-white/60 transition-all",
-          )}
-          disabled={pending}
-          required
-        />
-        {state.error && <p className="text-yellow-300 text-xs mt-2">{state.error}</p>}
-      </div>
-
-      <Button
-        type="submit"
-        disabled={pending}
-        className="mt-auto bg-gray-900 hover:bg-gray-800 text-white h-10 px-8 sm:px-12 py-2 sm:py-3 rounded-md text-base sm:text-lg font-semibold shadow-lg w-full max-w-xs flex items-center justify-center"
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex w-full flex-grow flex-col items-center gap-4"
       >
-        {pending ? "저장 중..." : "다음"}
-      </Button>
-    </form>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem className="w-full max-w-xs">
+              <FormControl>
+                <Input
+                  placeholder="이름 또는 닉네임을 입력해주세요."
+                  className="w-full rounded-md border border-[#BEE3C2] bg-[#F0FAF4] px-4 py-3 text-center text-sm text-[#1A3C2C] placeholder-[#7AAE90] disabled:opacity-50"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage className="text-xs text-yellow-300">
+                {form.formState.errors.name?.message}
+              </FormMessage>
+            </FormItem>
+          )}
+        />
+        <Button
+          type="submit"
+          disabled={form.formState.isSubmitting}
+          className="mt-auto w-full rounded-md bg-[#34A853] px-6 py-5 text-base font-semibold text-white hover:bg-[#2f974a]"
+        >
+          {form.formState.isSubmitting ? "저장 중..." : "다음"}
+        </Button>
+      </form>
+    </Form>
   );
-}
+};
+
+export default ProfileNameForm;
