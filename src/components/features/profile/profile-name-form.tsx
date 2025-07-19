@@ -22,6 +22,10 @@ const ProfileNameForm = () => {
     try {
       await saveProfileName(formData);
     } catch (error) {
+      // redirect로 인한 에러는 무시 (정상적인 리다이렉트)
+      if (error instanceof Error && error.message.includes("NEXT_REDIRECT")) {
+        return;
+      }
       form.setError("name", {
         type: "manual",
         message: error instanceof Error ? error.message : "오류가 발생했습니다",
