@@ -73,8 +73,8 @@ const BirthTimeFields = ({ form }: BirthTimeFieldsProps) => {
                   onCheckedChange={(checked) => {
                     field.onChange(checked);
                     if (checked) {
-                      form.setValue("birthHour", "");
-                      form.setValue("birthMinute", "");
+                      form.setValue("birthHour", null);
+                      form.setValue("birthMinute", null);
                     }
                   }}
                   className="border-[#34A853] data-[state=checked]:border-[#2f974a] data-[state=checked]:bg-[#34A853]"
