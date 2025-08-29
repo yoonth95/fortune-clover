@@ -16,8 +16,10 @@ const FortuneSummary = ({ fortune }: FortuneSummaryProps) => {
   return (
     <div className="flex flex-col items-center gap-1">
       <p className="text-xs text-yellow-300">{formatDate(fortune.todayDate)}</p>
-      <h1 className="text-foreground my-2 text-xl font-bold break-keep">{fortune.fortuneTitle}</h1>
-      <p className="p-2 text-sm leading-relaxed break-keep text-[#1A3C2C]">
+      <h1 className="text-foreground my-2 text-center text-xl font-bold break-keep">
+        {fortune.fortuneTitle}
+      </h1>
+      <p className="p-2 text-center text-sm leading-relaxed break-keep text-[#1A3C2C]">
         {fortune.fortuneContent}
       </p>
     </div>

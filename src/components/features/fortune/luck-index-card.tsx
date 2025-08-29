@@ -35,7 +35,10 @@ const LuckIndexCard = ({ luckInfo, luckIndex, userName }: LuckIndexCardProps) =>
         </div>
         <div className="flex h-15 flex-col items-center justify-start">
           <p className="mb-2.5 text-xs text-[#4A7A5A]">색상</p>
-          <div className="h-4 w-4 rounded-full" style={{ backgroundColor: luckInfo.color }} />
+          <div
+            className="h-4 w-4 rounded-full border"
+            style={{ backgroundColor: luckInfo.color }}
+          />
         </div>
         <div className="flex h-15 flex-col items-center justify-start">
           <p className="mb-2 text-xs text-[#4A7A5A]">숫자</p>
@@ -43,7 +46,9 @@ const LuckIndexCard = ({ luckInfo, luckIndex, userName }: LuckIndexCardProps) =>
         </div>
         <div className="flex h-15 flex-col items-center justify-start">
           <p className="mb-2 text-xs text-[#4A7A5A]">음식</p>
-          <p className="text-sm leading-tight font-medium text-[#1A3C2C]">{luckInfo.food}</p>
+          <p className="text-sm leading-tight font-medium break-keep text-[#1A3C2C]">
+            {luckInfo.food}
+          </p>
         </div>
       </div>
     </Card>

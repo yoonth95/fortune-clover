@@ -19,22 +19,22 @@ const twelveStarsColor: Record<string, string> = {
 
 // 12신살 전체 매핑
 const twelveSinsalColor: Record<string, string> = {
-  천을귀인: "bg-green-50  text-green-700",
-  천덕귀인: "bg-blue-50   text-blue-700",
+  천을귀인: "bg-green-50 text-green-700",
+  천덕귀인: "bg-blue-50 text-blue-700",
   문창귀인: "bg-purple-50 text-purple-700",
-  화개살: "bg-red-50    text-red-700",
+  화개살: "bg-red-50 text-red-700",
   홍염살: "bg-orange-50 text-orange-700",
-  백호살: "bg-gray-50   text-gray-700",
-  현침살: "bg-pink-50   text-pink-700",
-  도화살: "bg-rose-50   text-rose-700",
-  역마살: "bg-lime-50   text-lime-700",
-  액살: "bg-amber-50  text-amber-700",
-  재살: "bg-cyan-50   text-cyan-700",
+  백호살: "bg-gray-50 text-gray-700",
+  현침살: "bg-pink-50 text-pink-700",
+  도화살: "bg-rose-50 text-rose-700",
+  역마살: "bg-lime-50 text-lime-700",
+  액살: "bg-amber-50 text-amber-700",
+  재살: "bg-cyan-50 text-cyan-700",
   망신살: "bg-fuchsia-50 text-fuchsia-700",
-  고독살: "bg-stone-50  text-stone-700",
-  혈겁살: "bg-red-50    text-red-700",
-  공망: "bg-gray-50   text-gray-700",
-  월살: "bg-sky-50    text-sky-700",
+  고독살: "bg-stone-50 text-stone-700",
+  혈겁살: "bg-red-50 text-red-700",
+  공망: "bg-gray-50 text-gray-700",
+  월살: "bg-sky-50 text-sky-700",
   천살: "bg-violet-50 text-violet-700",
   귀문관살: "bg-indigo-50 text-indigo-700",
 };
@@ -47,18 +47,29 @@ interface DetailedFortuneCardProps {
 }
 
 const DetailedFortuneCard = ({ title, code, type, description }: DetailedFortuneCardProps) => {
+  const getColorKey = (type: string) => {
+    const match = type.match(/^([^()]+)/);
+    return match ? match[1] : type;
+  };
+
+  const colorKey = getColorKey(type);
+  const colorMapping = code === "stars" ? twelveStarsColor : twelveSinsalColor;
+  const colorClass = colorMapping[colorKey] ?? "bg-gray-100 text-gray-800";
+
   return (
     <Card className="flex flex-col gap-3 p-5">
-      <div className="flex h-6 items-center gap-2">
-        <h2 className="text-sm font-bold text-[#1A3C2C]">{title}</h2>
-        <Badge
-          className={`text-xs ${
-            (code === "stars" ? twelveStarsColor[type] : twelveSinsalColor[type]) ??
-            "bg-gray-100 text-gray-800"
-          }`}
-        >
-          {type}
-        </Badge>
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="min-w-0 flex-1">
+          <h2 className="text-sm font-bold break-keep text-[#1A3C2C]">{title}</h2>
+        </div>
+        <div className="flex-shrink-0">
+          <Badge
+            title={type}
+            className={`flex max-w-[290px] justify-start truncate text-xs ${colorClass}`}
+          >
+            {type}
+          </Badge>
+        </div>
       </div>
       <p className="text-sm leading-relaxed break-keep text-[#2C6243]">{description}</p>
     </Card>
