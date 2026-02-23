@@ -13,43 +13,18 @@ export const ProfileNameSchema = z.object({
 export type ProfileNameType = z.infer<typeof ProfileNameSchema>;
 
 // profile detail
-const BaseSchema = z.object({
+// birthHour: 지지 값 ('자','축','인','묘','진','사','오','미','신','유','술','해') 또는 '모름'
+const VALID_BIRTH_HOURS = ['자', '축', '인', '묘', '진', '사', '오', '미', '신', '유', '술', '해', '모름'] as const;
+
+export const ProfileDetailSchema = z.object({
   gender: z.string().min(1, { message: "성별을 선택해주세요." }),
   calendarType: z.string().min(1, { message: "양력/음력을 선택해주세요." }),
   birthDate: z.string().min(1, { message: "생년월일을 선택해주세요" }),
-  birthHour: z
-    .string()
-    .nullable()
-    .refine((val) => !val || (parseInt(val) >= 0 && parseInt(val) <= 23), {
-      message: "0~23 사이의 시간을 입력해주세요",
-    }),
-  birthMinute: z
-    .string()
-    .nullable()
-    .refine((val) => !val || (parseInt(val) >= 0 && parseInt(val) <= 59), {
-      message: "0~59 사이의 분을 입력해주세요",
-    }),
-  unknownTime: z.boolean(),
+  birthHour: z.string().min(1, { message: "태어난 시간을 선택해주세요" }).refine(
+    (val) => VALID_BIRTH_HOURS.includes(val as typeof VALID_BIRTH_HOURS[number]),
+    { message: "올바른 시간을 선택해주세요" },
+  ),
 });
-
-export const ProfileDetailSchema = BaseSchema.refine(
-  (data) => {
-    if (data.unknownTime) {
-      return data.birthHour === null && data.birthMinute === null;
-    } else {
-      return (
-        data.birthHour !== null &&
-        data.birthMinute !== null &&
-        data.birthHour !== "" &&
-        data.birthMinute !== ""
-      );
-    }
-  },
-  {
-    message: "태어난 시간을 모른다면 체크해주세요. 시간을 안다면 시간과 분을 모두 입력해주세요.",
-    path: ["unknownTime"],
-  },
-);
 
 export type ProfileDetailType = z.infer<typeof ProfileDetailSchema>;
 

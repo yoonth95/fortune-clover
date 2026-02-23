@@ -19,8 +19,6 @@ const ProfileDetailForm = ({ defaultValues = {} }: ProfileDetailFormProps) => {
       calendarType: "",
       birthDate: "",
       birthHour: "",
-      birthMinute: "",
-      unknownTime: false,
       ...defaultValues,
     },
   });

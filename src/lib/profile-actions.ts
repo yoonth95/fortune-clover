@@ -62,9 +62,7 @@ export async function saveProfileDetail(formData: FormData) {
     gender: formData.get("gender") as string,
     calendarType: formData.get("calendarType") as string,
     birthDate: formData.get("birthDate") as string,
-    birthHour: (formData.get("birthHour") as string) || null,
-    birthMinute: (formData.get("birthMinute") as string) || null,
-    unknownTime: formData.get("unknownTime") === "true",
+    birthHour: formData.get("birthHour") as string,
   };
 
   // Zod 검증
@@ -98,9 +96,7 @@ export async function updateProfile(formData: FormData) {
     gender: formData.get("gender") as string,
     calendarType: formData.get("calendarType") as string,
     birthDate: formData.get("birthDate") as string,
-    birthHour: (formData.get("birthHour") as string) || null,
-    birthMinute: (formData.get("birthMinute") as string) || null,
-    unknownTime: formData.get("unknownTime") === "true",
+    birthHour: formData.get("birthHour") as string,
   };
 
   const validationResult = ProfileSchema.safeParse(rawData);

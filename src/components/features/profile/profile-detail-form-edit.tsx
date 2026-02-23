@@ -22,8 +22,6 @@ const ProfileDetailFormEdit = ({ defaultValues = {}, onSuccess }: ProfileDetailF
       calendarType: "",
       birthDate: "",
       birthHour: "",
-      birthMinute: "",
-      unknownTime: false,
       ...defaultValues,
     },
   });
