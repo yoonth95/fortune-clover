@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { ProfileNameSchema, ProfileDetailSchema, ProfileSchema } from "@/types/ProfileType";
 import { updateUserName, updateUserDetail, updateUserProfile } from "./cookie-utils";
 
@@ -27,9 +26,6 @@ export async function saveProfileName(formData: FormData) {
     console.error("Error saving name:", error);
     throw new Error("저장 중 오류가 발생했습니다. 다시 시도해주세요.");
   }
-
-  // 성공적으로 저장된 후 리다이렉트
-  redirect("/profile/detail");
 }
 
 /**
@@ -82,9 +78,6 @@ export async function saveProfileDetail(formData: FormData) {
     console.error("Error saving detail:", error);
     throw new Error("저장 중 오류가 발생했습니다. 다시 시도해주세요.");
   }
-
-  // 성공적으로 저장된 후 리다이렉트
-  redirect("/fortune");
 }
 
 /**
@@ -114,6 +107,4 @@ export async function updateProfile(formData: FormData) {
     console.error("Error updating profile:", error);
     throw new Error("프로필 정보 업데이트 중 오류가 발생했습니다.");
   }
-
-  redirect("/fortune");
 }

@@ -41,6 +41,7 @@ const BirthDateField = ({ form, buttonClass }: BirthDateFieldProps) => {
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
+                  type="button"
                   variant="outline"
                   className={cn(
                     "w-full flex-1 justify-center px-4 py-5 text-xs font-normal sm:text-sm",

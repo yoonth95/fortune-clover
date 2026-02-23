@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
@@ -9,6 +10,7 @@ import { saveProfileName } from "@/lib/profile-actions";
 import { ProfileNameSchema, type ProfileNameType } from "@/types/ProfileType";
 
 const ProfileNameForm = () => {
+  const router = useRouter();
   const form = useForm<ProfileNameType>({
     resolver: zodResolver(ProfileNameSchema),
     defaultValues: {
@@ -21,11 +23,8 @@ const ProfileNameForm = () => {
     formData.append("name", values.name);
     try {
       await saveProfileName(formData);
+      router.push("/profile/detail");
     } catch (error) {
-      // redirect로 인한 에러는 무시 (정상적인 리다이렉트)
-      if (error instanceof Error && error.message.includes("NEXT_REDIRECT")) {
-        return;
-      }
       form.setError("name", {
         type: "manual",
         message: error instanceof Error ? error.message : "오류가 발생했습니다",
