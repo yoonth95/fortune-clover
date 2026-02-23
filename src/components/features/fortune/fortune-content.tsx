@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FortuneResult from "./fortune-result";
 import FortuneLoading from "./loading";
 import ErrorFallback from "./error-fallback";
@@ -21,8 +21,15 @@ const FortuneContent = ({ profile, onProfileUpdate }: FortuneContentProps) => {
   const [fortune, setFortune] = useState<FortuneResultType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const fetchedRef = useRef(false);
+
+  // 객체 참조 변경에 의한 불필요한 재실행 방지용 안정적 키
+  const profileKey = JSON.stringify(profile);
 
   useEffect(() => {
+    // Strict Mode 등으로 인한 중복 호출 방지
+    if (fetchedRef.current) return;
+
     const fetchFortune = async () => {
       try {
         setIsLoading(true);
@@ -37,6 +44,7 @@ const FortuneContent = ({ profile, onProfileUpdate }: FortuneContentProps) => {
           return;
         }
 
+        fetchedRef.current = true;
         console.log("새로운 운세 데이터를 요청합니다...");
 
         // 2. 캐시가 없거나 유효하지 않으면 API 호출
@@ -63,6 +71,7 @@ const FortuneContent = ({ profile, onProfileUpdate }: FortuneContentProps) => {
       } catch (err) {
         console.error("운세 생성 오류:", err);
         setError(err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다.");
+        fetchedRef.current = false; // 에러 시 재시도 가능하도록 리셋
 
         // 에러 발생시 캐시 삭제 (손상된 데이터일 수 있음)
         clearFortuneFromStorage();
@@ -74,7 +83,8 @@ const FortuneContent = ({ profile, onProfileUpdate }: FortuneContentProps) => {
     if (profile) {
       fetchFortune();
     }
-  }, [profile]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profileKey]);
 
   if (isLoading) {
     return <FortuneLoading />;
