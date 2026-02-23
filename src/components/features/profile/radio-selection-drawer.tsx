@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
   Drawer,
   DrawerContent,
@@ -37,6 +38,7 @@ const RadioSelectionDrawer = ({
   radioClass,
 }: RadioSelectionDrawerProps) => {
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   return (
     <FormField
@@ -44,9 +46,18 @@ const RadioSelectionDrawer = ({
       name={name}
       render={({ field }) => (
         <FormItem className="w-full">
-          <Drawer open={open} onOpenChange={setOpen}>
+          <Drawer
+            open={open}
+            onOpenChange={(isOpen) => {
+              if (isOpen) {
+                triggerRef.current?.blur();
+              }
+              setOpen(isOpen);
+            }}
+          >
             <DrawerTrigger asChild>
               <Button
+                ref={triggerRef}
                 type="button"
                 variant="outline"
                 className={cn(
@@ -62,7 +73,13 @@ const RadioSelectionDrawer = ({
             <DrawerContent>
               <DrawerHeader>
                 <DrawerTitle>{title}</DrawerTitle>
-                {description && <DrawerDescription>{description}</DrawerDescription>}
+                {description ? (
+                  <DrawerDescription>{description}</DrawerDescription>
+                ) : (
+                  <VisuallyHidden>
+                    <DrawerDescription>{title} 선택</DrawerDescription>
+                  </VisuallyHidden>
+                )}
               </DrawerHeader>
               <div className="px-4 pb-4">
                 <RadioGroup

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,7 @@ interface ProfileDetailFormProps {
 }
 
 const ProfileDetailFormEdit = ({ defaultValues = {}, onSuccess }: ProfileDetailFormProps) => {
+  const router = useRouter();
   const form = useForm<ProfileDataType>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: {
@@ -33,6 +35,7 @@ const ProfileDetailFormEdit = ({ defaultValues = {}, onSuccess }: ProfileDetailF
     });
     try {
       await updateProfile(formData);
+      router.push("/fortune");
     } catch (error) {
       console.error(error);
       // 에러 처리 (e.g., form.setError)
